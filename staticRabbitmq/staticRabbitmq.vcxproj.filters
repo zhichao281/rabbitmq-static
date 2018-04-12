@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\rabbitmq">
+      <UniqueIdentifier>{5665b4a2-d150-45ed-9666-b0063a0d7307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\rabbitmq">
+      <UniqueIdentifier>{582d73eb-3fb3-4ca0-94fd-3552c01aa40c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\SimpleAmqpClient">
+      <UniqueIdentifier>{6a2cfce3-d152-4121-b035-006ed82465fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SimpleAmqpClient">
+      <UniqueIdentifier>{de61ef53-28ca-46f1-9d97-1a70475f1075}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_framing.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_hostcheck.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_openssl_hostname_validation.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_private.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_socket.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_ssl_socket.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_table.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_tcp_socket.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\amqp_time.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\config.h">
+      <Filter>头文件\rabbitmq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpLibraryException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpResponseLibraryException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\BadUriException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\BasicMessage.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\Channel.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\ChannelImpl.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\ConnectionClosedException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\ConsumerCancelledException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\ConsumerTagNotFoundException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\Envelope.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\MessageReturnedException.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\SimpleAmqpClient.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\Table.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\TableImpl.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\Util.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SimpleAmqpClient\Version.h">
+      <Filter>头文件\SimpleAmqpClient</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_api.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_connection.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_consumer.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_framing.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_mem.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_socket.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_table.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_tcp_socket.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_time.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librabbitmq\amqp_url.c">
+      <Filter>源文件\rabbitmq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\AmqpException.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\AmqpLibraryException.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\AmqpResponseLibraryException.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\BasicMessage.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\Channel.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\ChannelImpl.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\Envelope.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\MessageReturnedException.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\Table.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\TableImpl.cpp">
+      <Filter>源文件\SimpleAmqpClient</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\librabbitmq\CMakeLists.txt">
+      <Filter>源文件\rabbitmq</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\librabbitmq\codegen.py">
+      <Filter>源文件\rabbitmq</Filter>
+    </None>
+  </ItemGroup>
+</Project>

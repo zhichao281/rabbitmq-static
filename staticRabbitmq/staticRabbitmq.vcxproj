@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{EC092D62-7F4D-436B-A6A4-71A180BB3592}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>staticRabbitmq</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\study\rabbitmq-static\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>E:\study\rabbitmq-static\include;D:\soft\boost_1_66_0;$(WindowsSDK_IncludePath);$(VC_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;HAVE_HTONLL;AMQP_STATIC;HAVE_CONFIG_H;AMQP_BUILD;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SimpleAmqpClient_EXPORTS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;NDEBUG;WIN32;_WINDOWS;_LIB;AMQP_STATIC;HAVE_CONFIG_H;AMQP_BUILD;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\amqp.h" />
+    <ClInclude Include="..\include\amqp_framing.h" />
+    <ClInclude Include="..\include\amqp_hostcheck.h" />
+    <ClInclude Include="..\include\amqp_openssl_hostname_validation.h" />
+    <ClInclude Include="..\include\amqp_private.h" />
+    <ClInclude Include="..\include\amqp_socket.h" />
+    <ClInclude Include="..\include\amqp_ssl_socket.h" />
+    <ClInclude Include="..\include\amqp_table.h" />
+    <ClInclude Include="..\include\amqp_tcp_socket.h" />
+    <ClInclude Include="..\include\amqp_time.h" />
+    <ClInclude Include="..\include\config.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpLibraryException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\AmqpResponseLibraryException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\BadUriException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\BasicMessage.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\Channel.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\ChannelImpl.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\ConnectionClosedException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\ConsumerCancelledException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\ConsumerTagNotFoundException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\Envelope.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\MessageReturnedException.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\SimpleAmqpClient.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\Table.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\TableImpl.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\Util.h" />
+    <ClInclude Include="..\include\SimpleAmqpClient\Version.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\librabbitmq\amqp_api.c" />
+    <ClCompile Include="..\librabbitmq\amqp_connection.c" />
+    <ClCompile Include="..\librabbitmq\amqp_consumer.c" />
+    <ClCompile Include="..\librabbitmq\amqp_framing.c" />
+    <ClCompile Include="..\librabbitmq\amqp_mem.c" />
+    <ClCompile Include="..\librabbitmq\amqp_socket.c" />
+    <ClCompile Include="..\librabbitmq\amqp_table.c" />
+    <ClCompile Include="..\librabbitmq\amqp_tcp_socket.c" />
+    <ClCompile Include="..\librabbitmq\amqp_time.c" />
+    <ClCompile Include="..\librabbitmq\amqp_url.c" />
+    <ClCompile Include="..\SimpleAmqpClient\AmqpException.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\AmqpLibraryException.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\AmqpResponseLibraryException.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\BasicMessage.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\Channel.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;SimpleAmqpClient_EXPORTS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;NDEBUG;WIN32;_WINDOWS;_LIB;HAVE_HTONLL;AMQP_STATIC;HAVE_CONFIG_H;AMQP_BUILD;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\SimpleAmqpClient\ChannelImpl.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\Envelope.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\MessageReturnedException.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\Table.cpp" />
+    <ClCompile Include="..\SimpleAmqpClient\TableImpl.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\librabbitmq\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\librabbitmq\codegen.py" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
