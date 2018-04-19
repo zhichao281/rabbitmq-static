@@ -25,7 +25,7 @@ CRabbitMQ::CRabbitMQ()
 	m_strPassWord = "1523526883053_43a5ee3de54bb08d9aa12e1c82c1a9259f6f0ad6";
 	m_strVHost = "wsrtc.vpclient_test.com";
 
-
+	m_strExchangeName = "amq.topic";
 	this->m_channel = 1; //默认用1号通道，通道无所谓 
 	m_sock = NULL;
 	m_conn = NULL;
@@ -83,8 +83,6 @@ int32_t CRabbitMQ::Connect(const std::string & host, int port,
 		return -4;
 }
 
-
-
 int32_t CRabbitMQ::Disconnect(string &ErrorReturn)
 {
 	if (NULL != m_conn)
@@ -99,9 +97,6 @@ int32_t CRabbitMQ::Disconnect(string &ErrorReturn)
 	}
 	return 0;
 }
-
-
-
 
 //返回1代表正常 其他都是错
 int32_t CRabbitMQ::AssertError(amqp_rpc_reply_t x, string context, string &ErrorReturn)
@@ -210,8 +205,6 @@ int32_t CRabbitMQ::queueDeclare(
 	amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
 }
 
-
-
 //step3 bind
 int32_t CRabbitMQ::bindQueue(
 	const std::string & queue_name,
@@ -233,7 +226,6 @@ int32_t CRabbitMQ::bindQueue(
 	amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
 	return 0;
 }
-
 
 int32_t  CRabbitMQ::unbindQueue(
 	const std::string & queue_name,
@@ -400,7 +392,7 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<string> &message_a
 		return -1;
 	}
 	amqp_bytes_t queuename = amqp_cstring_bytes(queue_name.c_str());
-	amqp_queue_declare(m_conn, m_channel, queuename, 0, 1, 0, 0, amqp_empty_table);
+	amqp_queue_declare(m_conn, m_channel, queuename, 0, durable, 0, 0, amqp_empty_table);
 
 	amqp_basic_qos(m_conn, m_channel, 0, GetNum, 0);
 	int ack = 0; // no_ack    是否需要确认消息后再从队列中删除消息
@@ -443,7 +435,13 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<string> &message_a
 	return hasget;
 }
 
-int32_t CRabbitMQ::consumer(const string & queue_name, std::function<void(std::string, std::string)> SignalListener, bool durable, timeval * timeout, string & ErrorReturn)
+int32_t CRabbitMQ::consumer(const string & queue_name, 
+	std::function<void(std::string, std::string)> SignalListener,
+	bool durable,
+	bool no_local,
+	bool no_ack,
+	bool exclusive, 
+	timeval * timeout, string & ErrorReturn)
 {
 	if (NULL == m_conn)
 	{
@@ -460,11 +458,11 @@ int32_t CRabbitMQ::consumer(const string & queue_name, std::function<void(std::s
 		return -1;
 	}
 	amqp_bytes_t queuename = amqp_cstring_bytes(queue_name.c_str());
-	amqp_queue_declare(m_conn, channel, queuename, 0, 0, 0, 0, amqp_empty_table);
+	amqp_queue_declare(m_conn, channel, queuename, 0, durable, exclusive, 0, amqp_empty_table);
 
 	amqp_basic_qos(m_conn, channel, 0, GetNum, 0);
-	int ack = 0; // no_ack    是否需要确认消息后再从队列中删除消息
-	amqp_basic_consume(m_conn, channel, queuename, amqp_empty_bytes, 0, ack, 0, amqp_empty_table);
+	int ack = no_ack; // no_ack    是否需要确认消息后再从队列中删除消息
+	amqp_basic_consume(m_conn, channel, queuename, amqp_empty_bytes, 0, ack, exclusive, amqp_empty_table);
 
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "Consuming", ErrorReturn))
 	{
@@ -536,4 +534,14 @@ void CRabbitMQ::__sleep(uint32_t millsecond)
 #elif defined (WIN32)
 	Sleep(millsecond);
 #endif
+}
+
+void CRabbitMQ::setChannel(const uint32_t channel)
+{
+	this->m_channel = channel;
+}
+
+uint32_t CRabbitMQ::getChannel()const
+{
+	return m_channel;
 }

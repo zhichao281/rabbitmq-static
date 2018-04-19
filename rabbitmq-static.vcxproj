@@ -218,75 +218,20 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-D:\download\cmake-3.11.0-win64-x64\bin\cmake.exe -HE:/study/rabbitmq-c-0.8.0 -BE:/study/rabbitmq-c-0.8.0/build --check-stamp-file E:/study/rabbitmq-c-0.8.0/build/librabbitmq/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\study\rabbitmq-c-0.8.0\build\librabbitmq\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-D:\download\cmake-3.11.0-win64-x64\bin\cmake.exe -HE:/study/rabbitmq-c-0.8.0 -BE:/study/rabbitmq-c-0.8.0/build --check-stamp-file E:/study/rabbitmq-c-0.8.0/build/librabbitmq/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\study\rabbitmq-c-0.8.0\build\librabbitmq\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-D:\download\cmake-3.11.0-win64-x64\bin\cmake.exe -HE:/study/rabbitmq-c-0.8.0 -BE:/study/rabbitmq-c-0.8.0/build --check-stamp-file E:/study/rabbitmq-c-0.8.0/build/librabbitmq/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\study\rabbitmq-c-0.8.0\build\librabbitmq\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-D:\download\cmake-3.11.0-win64-x64\bin\cmake.exe -HE:/study/rabbitmq-c-0.8.0 -BE:/study/rabbitmq-c-0.8.0/build --check-stamp-file E:/study/rabbitmq-c-0.8.0/build/librabbitmq/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:/study/rabbitmq-c-0.8.0/librabbitmq/CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;E:\study\rabbitmq-c-0.8.0\librabbitmq\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\study\rabbitmq-c-0.8.0\build\librabbitmq\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="BaseSignal.cpp" />
     <ClCompile Include="BaseSignalAdapter.cpp" />
     <ClCompile Include="CRabbitMQ.cpp" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_framing.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_connection.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_mem.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_socket.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_table.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_url.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_tcp_socket.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_time.c" />
-    <ClCompile Include="E:\study\rabbitmq-c-0.8.0\librabbitmq\amqp_consumer.c" />
     <ClCompile Include="librabbitmq\amqp_api.c" />
+    <ClCompile Include="librabbitmq\amqp_connection.c" />
+    <ClCompile Include="librabbitmq\amqp_consumer.c" />
+    <ClCompile Include="librabbitmq\amqp_framing.c" />
+    <ClCompile Include="librabbitmq\amqp_hostcheck.c" />
+    <ClCompile Include="librabbitmq\amqp_mem.c" />
+    <ClCompile Include="librabbitmq\amqp_socket.c" />
+    <ClCompile Include="librabbitmq\amqp_table.c" />
+    <ClCompile Include="librabbitmq\amqp_tcp_socket.c" />
+    <ClCompile Include="librabbitmq\amqp_time.c" />
+    <ClCompile Include="librabbitmq\amqp_url.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseSignal.h" />

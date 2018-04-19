@@ -14,8 +14,6 @@ BaseSignalAdapter::BaseSignalAdapter()
 {
 	m_strExchangeName = "amq.topic";
 	m_pSignalListenerThread.reset();
-
-
 	m_pRabbitmq = nullptr;
 }
 
@@ -25,6 +23,7 @@ BaseSignalAdapter::~BaseSignalAdapter()
 	string errmsg;
 	if (nullptr != m_pRabbitmq.get())
 	{
+		m_pRabbitmq->queue_delete(m_strQueue, 0, errmsg);
 		m_pRabbitmq->Disconnect(errmsg);
 		m_pRabbitmq.reset();
 	}
@@ -52,14 +51,22 @@ int BaseSignalAdapter::joinSignalChannel(std::string url, std::string userId, Th
 	m_strQueue = userId;
 
 	string ErrorReturn;
-	if (m_pRabbitmq.get() != nullptr)
+ 	if (m_pRabbitmq.get() != nullptr)
 	{
-		//´´½¨exchange
-		m_pRabbitmq->exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, false, false, ErrorReturn);
-		
-		//Ã¿¸ö¿Í»§¶ËÊ¹ÓÃÒ»¸öË½ÓÐµÄ¶ÓÁÐ
-		m_pRabbitmq->queueDeclare(userId, false, false, false, false, ErrorReturn);
-
+		//åˆ›å»ºexchange
+		//m_pRabbitmq->exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, true, false, ErrorReturn);
+		//å…ˆåˆ é™¤é˜Ÿåˆ—
+		int32_t nres=m_pRabbitmq->queue_delete(userId, 0, ErrorReturn);
+		if (nres !=0)
+		{
+			return nres;
+		}
+		//æ¯ä¸ªå®¢æˆ·ç«¯ä½¿ç”¨ä¸€ä¸ªç§æœ‰çš„é˜Ÿåˆ—
+		nres=m_pRabbitmq->queueDeclare(userId, false, false, true, false, ErrorReturn);
+		if (nres != 0)
+		{
+			return nres;
+		}
 		std::string UniRoutingKey = getUniRoutingKey(url, userId);
 
 		std::string BroadRoutingKey = getBroadRoutingKey(url);
@@ -95,29 +102,22 @@ int32_t BaseSignalAdapter::quitSignalChannel(std::string &ErrorReturn)
 	return 0;
 }
 
-#include  <iostream>
-#include <sstream>
-using namespace  std;
 void BaseSignalAdapter::sendMessage(std::string  channelUri, std::string  userId, std::string  message)
 {
 	if (m_pRabbitmq.get() != nullptr)
 	{
 		string errmsg;
 
-	/*	std::string UniRoutingKey = getUniRoutingKey(channelUri, userId);
-		UniRoutingKey = "wsrtc_vpclient_test_com.vpclient_test.send2.broad";
-		m_pRabbitmq->exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, false, false, errmsg);
-		m_pRabbitmq->basicPublish(UniRoutingKey,  message.c_str(), errmsg);
-*/
-
-		//´´½¨exchange
-		CRabbitMQ Listener;
-		Listener.Connect();
-		Listener.exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, false, false, errmsg);
 		std::string UniRoutingKey = getUniRoutingKey(channelUri, userId);
-		UniRoutingKey = "wsrtc_vpclient_test_com.vpclient_test.dwk.broad";
-		Listener.basicPublish(UniRoutingKey,  message.c_str(), errmsg);
-		Listener.Disconnect();
+		m_pRabbitmq->basicPublish(UniRoutingKey, message.c_str(), errmsg);
+
+		////åˆ›å»ºexchange
+		//CRabbitMQ Listener;
+		//Listener.Connect("180.97.246.16", 6841, "vpclient_test+wsrtc.vpclient_test.com+dwk000", "1523526883053_43a5ee3de54bb08d9aa12e1c82c1a9259f6f0ad6", "wsrtc.vpclient_test.com");
+		////Listener.exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, false, false, errmsg);
+		//std::string UniRoutingKey = getUniRoutingKey(channelUri, userId);
+		//Listener.basicPublish(UniRoutingKey,  message.c_str(), errmsg);
+		//Listener.Disconnect();
 	}
 }
 
@@ -127,7 +127,7 @@ void BaseSignalAdapter::broadcastMessage(std::string channelUri, std::string mes
 	{
 		string errmsg;
 		std::string BroadRoutingKey = getBroadRoutingKey(channelUri);
-		m_pRabbitmq->basicPublish(BroadRoutingKey.c_str(), message.c_str(), errmsg);
+		m_pRabbitmq->basicPublish(BroadRoutingKey, message.c_str(), errmsg);
 	}
 }
 
@@ -137,7 +137,7 @@ void BaseSignalAdapter::sendUnicastMessage(std::string  channelUri, std::string 
 	{
 		string errmsg;
 		std::string BroadRoutingKey = getBroadRoutingKey(channelUri);
-		m_pRabbitmq->basicPublish(BroadRoutingKey.c_str(), message.c_str(), errmsg);
+		m_pRabbitmq->basicPublish(BroadRoutingKey, message.c_str(), errmsg);
 	}
 }
 
@@ -151,26 +151,28 @@ void BaseSignalAdapter::SetMessageReceived(ThreadSignalListener mWSSignalListene
 		{
 	
 			m_bRun = true;
+		//	CRabbitMQ Listener;
+		//	Listener.setChannel(m_pRabbitmq->getChannel()+1);
+
+		//	Listener.Connect("180.97.246.16", 6841, "vpclient_test+wsrtc.vpclient_test.com+dwk000", "1523526883053_43a5ee3de54bb08d9aa12e1c82c1a9259f6f0ad6", "wsrtc.vpclient_test.com");
+			string errmsg;
+			int get_number = 1;
 			while (m_bRun)
-			{
-				CRabbitMQ Listener;
-				Listener.Connect();
-				string errmsg;
-				int get_number = 1;
-				::timeval timeout = { 5,5 };
-				//::timeval *timeout = NULL;
+			{		
+				//::timeval timeout = { 5,5 };
+				::timeval *timeout = NULL;
 				vector<CMessage> message_array;
-				//´ÓRabbitMQ·þÎñÆ÷È¡ÏûÏ¢
-				if (Listener.consumer(m_strQueue, mWSSignalListener, false, &timeout, errmsg) < 0)
+				//ä»ŽRabbitMQæœåŠ¡å™¨å–æ¶ˆæ¯
+				if (m_pRabbitmq->consumer(m_strQueue, mWSSignalListener, false,false,false,true, timeout, errmsg) < 0)
 				{
-					cout << "È¡ÏûÏ¢Ê§°Ü£¡" << endl;
+					cout << "å–æ¶ˆæ¯å¤±è´¥ï¼" << endl;
 				}
 				else
 				{
-					cout << "È¡ÏûÏ¢³É¹¦£¡" << endl;
-				}
-				Listener.Disconnect();
+					cout << "å–æ¶ˆæ¯æˆåŠŸï¼" << endl;
+				}			
 			}
+			//Listener.Disconnect();
 		
 		
 		}
@@ -195,7 +197,7 @@ bool BaseSignalAdapter::startswith(const std::string& str, const std::string& st
 	return false;
 }
 
-// Ìæ»»×Ö·û´®ÖÐÖ¸¶¨µÄ×Ö·û´®
+// æ›¿æ¢å­—ç¬¦ä¸²ä¸­æŒ‡å®šçš„å­—ç¬¦ä¸²
 int	BaseSignalAdapter::ReplaceStr(std::string &strBuf, std::string strSrc, std::string strDes)
 {
 	size_t				sBufSize = strBuf.size();

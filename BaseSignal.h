@@ -38,11 +38,6 @@ public:
 private:
 
 	BaseSignalAdapter  *m_Apater;
-	int					m_nPort;
-	std::string			m_strHost;
-	std::string			m_strUserName;
-	std::string			m_strPassWord;
-	std::string			m_strVHost;
 
 };
 

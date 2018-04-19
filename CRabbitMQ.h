@@ -182,7 +182,14 @@ public:
 	
 	int32_t consumer(const string & queue_name, vector<string> &message_array, bool durable = false, uint32_t GetNum = 1, struct timeval *timeout = NULL, string &ErrorReturn = string(""));
 	
-	int32_t consumer(const string & queue_name, std::function<void(std::string, std::string)> SignalListener, bool durable = false, struct timeval *timeout = NULL, string &ErrorReturn = string(""));
+	int32_t consumer(const string & queue_name,
+		std::function<void(std::string, std::string)> SignalListener,
+		bool durable = false,
+		bool no_local = false,
+		bool no_ack = false,
+		bool exclusive = false,
+		struct timeval *timeout = NULL, 
+		string &ErrorReturn = string(""));
 
 
 	/**
@@ -191,9 +198,21 @@ public:
 	*	@param       [in]               if_unused     消息队列是否在用，1 则论是否在用都删除
 	*   @param       [out]              ErrorReturn   错误信息
 	*   @return 等于0值代表成功删除queue，小于0代表错误，错误信息从ErrorReturn返回
-	*   @deprecated 由于特殊的原因，这个函数可能会在将来的版本中取消。
 	*/
 	int32_t queue_delete(const string queuename, int32_t if_unused = 0, string &ErrorReturn = string(""));
+
+
+	/**
+	* @brief setChannel         设置通道号
+	* @param [in]  channel      设置的通道号
+	*/
+	void setChannel(const uint32_t channel);
+
+	/**
+	* @brief getChannel    获得当前通道号
+	* @return              返回当前通道号
+	*/
+	uint32_t getChannel()const;
 
 
 	void __sleep(uint32_t millsecond);
