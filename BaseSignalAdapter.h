@@ -10,7 +10,7 @@
 #include "CRabbitMQ.h"
 using namespace std;
 
-typedef std::function<void(std::string,std::string)> ThreadSignalListener;
+typedef std::function<void(std::string, std::string)> ThreadSignalListener;
 
 class BaseSignalAdapter
 {
@@ -32,7 +32,7 @@ public:
 		const std::string &vhost = "/", string &ErrorReturn = string(""));
 
 	//加入对应的频道
-	int joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener);
+	int joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener, std::string &ErrorReturn = string(""));
 
 	//发送消息
 	void sendMessage(std::string  channelUri, std::string  userId, std::string  message);
@@ -80,17 +80,29 @@ public:
 	//设置回调信息
 	void SetMessageReceived(ThreadSignalListener mWSSignalListener);
 
-	
+
 private:
-	std::shared_ptr<CRabbitMQ>	  m_pRabbitmq;
+	//std::shared_ptr<CRabbitMQ>	  m_pRabbitmq;
+
+	std::shared_ptr<CRabbitMQ>	  m_pRabbitmqSend;
 	ThreadSignalListener		  m_WSSignalListener;  //监听amqo信令频道接受信息
 
 
-	std::shared_ptr<std::thread>  m_pSignalListenerThread;
+	//std::shared_ptr<std::thread>  m_pSignalListenerThread;
+
+	//std::shared_ptr<std::thread>  m_pSignalCreateThread;
+	std::shared_ptr<bool> GetRunStatus();
 public:
 	std::string   m_strExchangeName;
 	std::string   m_strQueue;
 
-	bool          m_bRun;
+	int			  m_nPort;
+	std::string	  m_strHost;
+	std::string   m_strUserName;
+	std::string   m_strPassWord;
+	std::string   m_strVHost;
+
+	std::shared_ptr<bool>  m_bRun;
+	volatile bool  m_is_connected;
 };
 

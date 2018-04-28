@@ -21,10 +21,10 @@ public:
 		int port = 5672,
 		const std::string &username = "guest",
 		const std::string &password = "guest",
-		const std::string &vhost = "/");
+		const std::string &vhost = "/", std::string &ErrorReturn = std::string(""));
 
 	//加入对应的频道
-	int joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener=nullptr);
+	int joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener=nullptr, std::string &ErrorReturn = std::string(""));
 	
 	//发送消息
 	void sendMessage(std::string  channelUri, std::string  userId, std::string  message);

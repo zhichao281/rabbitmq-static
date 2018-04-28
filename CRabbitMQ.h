@@ -234,5 +234,7 @@ public:
 	amqp_socket_t           *m_sock;
 	amqp_connection_state_t  m_conn;
 	uint32_t				 m_channel;
+
+	volatile bool  m_bRun;
 };
 

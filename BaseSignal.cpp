@@ -19,17 +19,16 @@ int BaseSignal::Create(const std::string &host,
 	int port,
 	const std::string &username,
 	const std::string &password,
-	const std::string &vhost)
+	const std::string &vhost, std::string &ErrorReturn)
 {
-
-
-	m_Apater->Connect(host, port, username, password, vhost);
-	return 0;
+	
+	int res= m_Apater->Connect(host, port, username, password, vhost, ErrorReturn);
+	return res;
 }
 
-int BaseSignal::joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener)
+int BaseSignal::joinSignalChannel(std::string url, std::string userId, ThreadSignalListener mWSSignalListener, std::string &ErrorReturn )
 {
-	int res = m_Apater->joinSignalChannel(url, userId, mWSSignalListener);
+	int res = m_Apater->joinSignalChannel(url, userId, mWSSignalListener, ErrorReturn);
 	return res;
 }
 

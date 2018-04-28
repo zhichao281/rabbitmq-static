@@ -18,7 +18,7 @@ CRabbitMQ::CRabbitMQ()
 	//m_strUserName = "guest";
 	//m_strPassWord = "guest";
 	//m_strVHost = "/";
-
+	m_bRun = true;
 	m_nPort = 6841;
 	m_strHost = "180.97.246.16";
 	m_strUserName = "vpclient_test+wsrtc.vpclient_test.com+dwk000";
@@ -89,7 +89,6 @@ int32_t CRabbitMQ::Disconnect(string &ErrorReturn)
 	{
 		if (1 != AssertError(amqp_connection_close(m_conn, AMQP_REPLY_SUCCESS), "Closing connection", ErrorReturn))
 			return -1;
-
 		if (amqp_destroy_connection(m_conn) < 0)
 			return -1;
 
@@ -203,6 +202,7 @@ int32_t CRabbitMQ::queueDeclare(
 		return -1;
 	}
 	amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
+	return 0;
 }
 
 //step3 bind
@@ -328,8 +328,8 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<CMessage> &message
 	amqp_queue_declare(m_conn, m_channel, queuename, 0, durable, 0, 0, amqp_empty_table);
 
 	amqp_basic_qos(m_conn, m_channel, 0, GetNum, 0);
-	int ack = 0; // no_ack    是否需要确认消息后再从队列中删除消息
-	amqp_basic_consume(m_conn, m_channel, queuename, amqp_empty_bytes, 0, ack, 0, amqp_empty_table);
+	int no_ack = 1; // no_ack    是否需要确认消息后再从队列中删除消息
+	amqp_basic_consume(m_conn, m_channel, queuename, amqp_empty_bytes, 0, no_ack, 0, amqp_empty_table);
 
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "Consuming", ErrorReturn))
 	{
@@ -350,7 +350,7 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<CMessage> &message
 			amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
 			ErrorReturn = "无法取得消息\n";
 			if (0 == hasget)
-				return -res.reply_type;
+				return res.reply_type;
 			else
 				return hasget;
 		}
@@ -448,10 +448,10 @@ int32_t CRabbitMQ::consumer(const string & queue_name,
 		ErrorReturn = "还未创建连接";
 		return -1;
 	}
-	int GetNum = 1;
+	int GetNum = 1000;
 	int  channel = m_channel+1;
 	amqp_channel_open(m_conn, channel);
-	amqp_confirm_select(m_conn, channel);  //在通道上打开Publish确认  
+	//amqp_confirm_select(m_conn, channel);  //在通道上打开Publish确认  
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "open channel", ErrorReturn))
 	{
 		amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
@@ -472,12 +472,17 @@ int32_t CRabbitMQ::consumer(const string & queue_name,
 	amqp_rpc_reply_t res;
 	amqp_envelope_t envelope;
 	int hasget = 0;
-	while (1)
+	
+	while (m_bRun)
 	{
 		amqp_maybe_release_buffers(m_conn);
 		res = amqp_consume_message(m_conn, &envelope, timeout, 0);
 		if (AMQP_RESPONSE_NORMAL != res.reply_type)
 		{
+			if (m_bRun == false)
+			{
+				return -res.reply_type;
+			}
 			amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
 			ErrorReturn = "无法取得消息\n";
 			if (0 == hasget)
@@ -487,7 +492,11 @@ int32_t CRabbitMQ::consumer(const string & queue_name,
 		}
 		string str((char *)envelope.message.body.bytes, (char *)envelope.message.body.bytes + envelope.message.body.len);
 		
-		SignalListener(queue_name, str);
+		if (SignalListener != nullptr)
+		{
+			SignalListener(queue_name, str);
+		}
+	
 		amqp_destroy_envelope(&envelope);
 		int rtn = amqp_basic_ack(m_conn, channel, envelope.delivery_tag, 1);
 		if (rtn != 0)
