@@ -2,6 +2,8 @@
 //
 
 #include "stdafx.h"
+#include <string>
+using namespace std;
 #include "../BaseSignal.h"
 
 #ifdef _DEBUG
@@ -25,22 +27,21 @@ static void onMessage(string str1, string  str2)
 
 int main()
 {
-	string str1 = "中文";
-	cout << "a中文";
-	BaseSignal sigal1;
-	sigal1.Create("180.97.246.16",6841, "vpclient_test+wsrtc.vpclient_test.com+dwk001", "1524051262655_6f1c9c55c1a9edd17995a7a07131e01e0871289f","wsrtc.vpclient_test.com");
-	sigal1.joinSignalChannel("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk102", onMessage);
-	BaseSignal sendSignal;
-	sendSignal.Create("180.97.246.16", 6841, "vpclient_test+wsrtc.vpclient_test.com+dwk001", "1524051262655_6f1c9c55c1a9edd17995a7a07131e01e0871289f", "wsrtc.vpclient_test.com");
 
+	BaseSignal sigal1;
+	sigal1.Create();
+	sigal1.joinSignalChannel("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk102", onMessage);
+	//sigal1.sendMessage("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk102", "{\"from\":\"dwk000\",\"to\":\"\",\"type\":1,\"content\":\"test\"}");
+	//sigal1.Create("180.97.246.16",6841, "vpclient_test+wsrtc.vpclient_test.com+dwk001", "1524051262655_6f1c9c55c1a9edd17995a7a07131e01e0871289f","wsrtc.vpclient_test.com");
+	//sigal1.joinSignalChannel("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk102", onMessage);
+	//BaseSignal sendSignal;
+	//sendSignal.Create("180.97.246.16", 6841, "vpclient_test+wsrtc.vpclient_test.com+dwk001", "1524051262655_6f1c9c55c1a9edd17995a7a07131e01e0871289f", "wsrtc.vpclient_test.com");
+	system("pause");
 	while (1)
 	{
 		int i;
 		cin >> i;
-
-	
-		sendSignal.sendMessage("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk000", "{\"from\":\"dwk000\",\"to\":\"\",\"type\":1,\"content\":\"test\"}");
-		system("pause");
+		sigal1.sendMessage("wssig://wsrtc.vpclient_test.com/vpclient_test/dwk", "dwk102", "{\"from\":\"dwk000\",\"to\":\"\",\"type\":1,\"content\":\"test\"}");
 	}
 
 

@@ -12,7 +12,7 @@ const std::string EXCHANGE_TYPE_TOPIC("topic");
 
 BaseSignalAdapter::BaseSignalAdapter()
 {
-	m_strExchangeName = "amq.topic";
+	m_strExchangeName = "1amq.topic";
 	//m_pSignalListenerThread.reset();
 	//m_pRabbitmq.reset();
 	m_is_connected = false;
@@ -53,9 +53,7 @@ int BaseSignalAdapter::joinSignalChannel(std::string url, std::string userId, Th
 {
 	m_strQueue = userId;
 
-	SetMessageReceived(mWSSignalListener);
 
-	//创建监听队列
 	std::shared_ptr<CRabbitMQ>	  Rabbitmq;
 	Rabbitmq.reset(new CRabbitMQ);
 	int res = Rabbitmq->Connect(m_strHost, m_nPort, m_strUserName, m_strPassWord, m_strVHost, ErrorReturn);
@@ -65,7 +63,8 @@ int BaseSignalAdapter::joinSignalChannel(std::string url, std::string userId, Th
 	}
 	if (Rabbitmq.get() != nullptr)
 	{
-		Rabbitmq->queue_delete(userId, 1, ErrorReturn);
+	//	Rabbitmq->exchangeDeclare(m_strExchangeName, EXCHANGE_TYPE_TOPIC, false, false, false, ErrorReturn);
+	//	Rabbitmq->queue_delete(userId, 1, ErrorReturn);
 		int nres = Rabbitmq->queueDeclare(userId, false, false, false, false, ErrorReturn);
 		if (nres != 0)
 		{
@@ -85,6 +84,10 @@ int BaseSignalAdapter::joinSignalChannel(std::string url, std::string userId, Th
 			Rabbitmq->bindQueue(userId, m_strExchangeName, BroadRoutingKey);
 		}
 		Rabbitmq->Disconnect();
+		Rabbitmq.reset();
+
+		//创建监听队列
+		SetMessageReceived(mWSSignalListener);
 		return 0;
 	}
 	else
@@ -104,20 +107,28 @@ int32_t BaseSignalAdapter::quitSignalChannel(std::string &ErrorReturn)
 		*m_bRun = false;
 	}
 	
-// 	if (m_is_connected == true)
-// 	{
-// 		int  num = 0;
-// 		while (m_is_connected == true && num < 10)
-// 		{
-// 			num++;
-// 			Sleep(20);
-// 		}
-// 	}
+
 	if (nullptr != m_pRabbitmqSend.get())
 	{
-		m_pRabbitmqSend->Disconnect(errmsg);
+		bool bStart = false;
+		std::thread joinThread([=, &bStart]()
+		{
+			std::shared_ptr<CRabbitMQ>	  RabbitmqSend = m_pRabbitmqSend;
+			bStart = true;
+			if (RabbitmqSend)
+			{
+				RabbitmqSend->Disconnect();
+				RabbitmqSend.reset();
+			}			
+		});
+		while (!bStart)
+		{
+			Sleep(1);
+		}
 		m_pRabbitmqSend.reset();
+		joinThread.detach();
 	}
+	
 	return 0;
 }
 
@@ -168,48 +179,62 @@ void BaseSignalAdapter::SetMessageReceived(ThreadSignalListener mWSSignalListene
 			return;
 		}
 		std::string   strQueue = m_strQueue;
-		RECONNECT:
+		std::string   strHost = m_strHost;
+		std::string   strUserName = m_strUserName;
+		std::string   strPassWord = m_strPassWord;
+		std::string   strVHost = m_strVHost;
+		int nPort = m_nPort;
+		
 		{
 			
-			CRabbitMQ Listener;
-			Listener.setChannel(2);
-			int res = Listener.Connect(m_strHost, m_nPort, m_strUserName, m_strPassWord, m_strVHost);
-			if (res != 0)
+			while (bRun.lock() && *(bRun.lock()))
 			{
+				CRabbitMQ Listener;
+				Listener.setChannel(2);
+				int res = Listener.Connect(strHost, nPort, strUserName, strPassWord, strVHost);
+				if (res != 0)
+				{
+					if (bRun.lock())
+					{
+						m_is_connected = false;
+						Sleep(500);
+						continue;
+					}
+				}
 				if (bRun.lock())
 				{
-					m_is_connected = false;
+					m_is_connected = true;
 				}
-				return;
-			}
-			string errmsg;
-			int get_number = 1;
-			while (bRun.lock() && *bRun.lock().get() == true)
-			{
-				::timeval timeout = { 0,10 };
-				//::timeval *timeout = NULL;
-				vector<CMessage> message_array;
-				//从RabbitMQ服务器取消息
-				if (Listener.consumer(strQueue, mWSSignalListener, false, false, false, false, &timeout, errmsg) < 0)
+				string errmsg;
+				int get_number = 1;
+				while (bRun.lock() && *bRun.lock().get() == true)
 				{
-					Listener.Disconnect();
-					if(bRun.lock() && *bRun.lock().get() == true)
-						goto RECONNECT;
-					cout << "取消息失败！" << endl;
+					::timeval timeout = { 0,100 };
+					//::timeval *timeout = NULL;
+					vector<CMessage> message_array;
+					//从RabbitMQ服务器取消息
+					if (Listener.consumer(bRun,strQueue, mWSSignalListener, false, false, true, false, &timeout,errmsg ) < 0)
+					{
+						Listener.Disconnect();
+						cout << "取消息失败！" << endl;
+						break;						
+					}
+					else
+					{
+						cout << "取消息成功！" << endl;
+					}
 				}
-				else
-				{
-					cout << "取消息成功！" << endl;
-				}
-			}
-			Listener.Disconnect();
+				Listener.Disconnect();
 
-		}
-		
-		if (bRun.lock())
-		{
-			m_is_connected = false;
-		}	
+			}
+
+			if (bRun.lock())
+			{
+				m_is_connected = false;
+			}
+
+			}
+			
 
 	});
 	joinThread.detach();

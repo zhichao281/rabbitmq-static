@@ -182,14 +182,13 @@ public:
 	
 	int32_t consumer(const string & queue_name, vector<string> &message_array, bool durable = false, uint32_t GetNum = 1, struct timeval *timeout = NULL, string &ErrorReturn = string(""));
 	
-	int32_t consumer(const string & queue_name,
+	int32_t consumer(std::weak_ptr<bool> bRun, const string & queue_name,
 		std::function<void(std::string, std::string)> SignalListener,
 		bool durable = false,
 		bool no_local = false,
 		bool no_ack = false,
 		bool exclusive = false,
-		struct timeval *timeout = NULL, 
-		string &ErrorReturn = string(""));
+		struct timeval *timeout = NULL, string &ErrorReturn = string("") );
 
 
 	/**

@@ -25,7 +25,7 @@ CRabbitMQ::CRabbitMQ()
 	m_strPassWord = "1523526883053_43a5ee3de54bb08d9aa12e1c82c1a9259f6f0ad6";
 	m_strVHost = "wsrtc.vpclient_test.com";
 
-	m_strExchangeName = "amq.topic";
+	m_strExchangeName = "1amq.topic";
 	this->m_channel = 1; //默认用1号通道，通道无所谓 
 	m_sock = NULL;
 	m_conn = NULL;
@@ -132,7 +132,7 @@ int32_t CRabbitMQ::AssertError(amqp_rpc_reply_t x, string context, string &Error
 			break;
 		}
 		default:
-			sprintf(rtnmsg, "%s: unknown server error, method id 0x%08X\n", context, x.reply.id);
+			sprintf(rtnmsg, "%s: unknown server error, method id 0x%08X\n", context.c_str(), x.reply.id);
 			break;
 		}
 		break;
@@ -178,7 +178,7 @@ int32_t CRabbitMQ::exchangeDeclare(
 	amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
 	return 0;
 }
-
+#include <map>
 //step2 declare a queue
 int32_t CRabbitMQ::queueDeclare(
 	const std::string &queue_name,
@@ -189,13 +189,23 @@ int32_t CRabbitMQ::queueDeclare(
 {
 	m_strQueue = queue_name;
 	amqp_channel_open(m_conn, m_channel);
-	amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
 	amqp_bytes_t _queue = amqp_cstring_bytes(queue_name.c_str());
 	int32_t _passive = passive;
 	int32_t _durable = durable;
 	int32_t _exclusive = exclusive;
 	int32_t _auto_delete = auto_delete;
-	amqp_queue_declare(m_conn, m_channel, _queue, _passive, _durable, _exclusive, _auto_delete, amqp_empty_table);
+
+
+	amqp_table_t _arguments;
+	amqp_table_entry_t_ _entry;
+	_entry.key= amqp_cstring_bytes("x-max-length");
+	_entry.value.kind = AMQP_FIELD_KIND_I32;
+	_entry.value.value.i32 = 10;
+	_arguments.entries = &_entry;
+	_arguments.num_entries = 1;
+
+	amqp_queue_declare(m_conn, m_channel, _queue, _passive, _durable, _exclusive, _auto_delete, _arguments);
+	//amqp_queue_declare(m_conn, m_channel, _queue, _passive, _durable, _exclusive, _auto_delete, amqp_empty_table);
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "queue_declare", ErrorReturn))
 	{
 		amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
@@ -213,7 +223,7 @@ int32_t CRabbitMQ::bindQueue(
 	string & ErrorReturn)
 {
 	amqp_channel_open(m_conn, m_channel);
-	amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
+	//amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
 	amqp_bytes_t _queue = amqp_cstring_bytes(queue_name.c_str());
 	amqp_bytes_t _exchange = amqp_cstring_bytes(exchange_name.c_str());
 	amqp_bytes_t _routkey = amqp_cstring_bytes(routing_key.c_str());
@@ -234,7 +244,6 @@ int32_t  CRabbitMQ::unbindQueue(
 	string & ErrorReturn)
 {
 	amqp_channel_open(m_conn, m_channel);
-	amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
 	amqp_bytes_t _queue = amqp_cstring_bytes(queue_name.c_str());
 	amqp_bytes_t _exchange = amqp_cstring_bytes(exchange_name.c_str());
 	amqp_bytes_t _routkey = amqp_cstring_bytes(routing_key.c_str());
@@ -318,7 +327,6 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<CMessage> &message
 		return -1;
 	}
 	amqp_channel_open(m_conn, m_channel);
-	amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "open channel", ErrorReturn))
 	{
 		amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
@@ -385,7 +393,6 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<string> &message_a
 		return -1;
 	}
 	amqp_channel_open(m_conn, m_channel);
-	amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
 	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "open channel", ErrorReturn))
 	{
 		amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
@@ -435,32 +442,24 @@ int32_t CRabbitMQ::consumer(const string & queue_name, vector<string> &message_a
 	return hasget;
 }
 
-int32_t CRabbitMQ::consumer(const string & queue_name, 
+int32_t CRabbitMQ::consumer(std::weak_ptr<bool> bRun, const string & queue_name,
 	std::function<void(std::string, std::string)> SignalListener,
 	bool durable,
 	bool no_local,
 	bool no_ack,
 	bool exclusive, 
-	timeval * timeout, string & ErrorReturn)
+	timeval * timeout,string & ErrorReturn)
 {
 	if (NULL == m_conn)
 	{
 		ErrorReturn = "还未创建连接";
 		return -1;
 	}
-	int GetNum = 1000;
-	int  channel = m_channel+1;
+	int GetNum = 1;
+	int  channel = m_channel;
 	amqp_channel_open(m_conn, channel);
-	//amqp_confirm_select(m_conn, channel);  //在通道上打开Publish确认  
-	if (1 != AssertError(amqp_get_rpc_reply(m_conn), "open channel", ErrorReturn))
-	{
-		amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
-		return -1;
-	}
 	amqp_bytes_t queuename = amqp_cstring_bytes(queue_name.c_str());
-	amqp_queue_declare(m_conn, channel, queuename, 0, durable, exclusive, 0, amqp_empty_table);
 
-	amqp_basic_qos(m_conn, channel, 0, GetNum, 0);
 	int ack = no_ack; // no_ack    是否需要确认消息后再从队列中删除消息
 	amqp_basic_consume(m_conn, channel, queuename, amqp_empty_bytes, 0, ack, exclusive, amqp_empty_table);
 
@@ -473,7 +472,7 @@ int32_t CRabbitMQ::consumer(const string & queue_name,
 	amqp_envelope_t envelope;
 	int hasget = 0;
 	
-	while (m_bRun)
+	while (m_bRun&&bRun.lock()&&*bRun.lock())
 	{
 		amqp_maybe_release_buffers(m_conn);
 		res = amqp_consume_message(m_conn, &envelope, timeout, 0);
@@ -483,27 +482,35 @@ int32_t CRabbitMQ::consumer(const string & queue_name,
 			{
 				return -res.reply_type;
 			}
-			amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
-			ErrorReturn = "无法取得消息\n";
-			if (0 == hasget)
-				return -res.reply_type;
-			else
+			
+			if (res.library_error != AMQP_STATUS_TIMEOUT)
+			{
+				amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
+				ErrorReturn = "无法取得消息\n";
+				// 			if (0 == hasget)
+				// 				return -res.reply_type;
+				// 			else
 				return hasget;
+			}
+			
 		}
-		string str((char *)envelope.message.body.bytes, (char *)envelope.message.body.bytes + envelope.message.body.len);
+		if (envelope.message.body.bytes)
+		{
+			string str((char *)envelope.message.body.bytes, (char *)envelope.message.body.bytes + envelope.message.body.len);
+
+			if (SignalListener != nullptr&&str.length() > 0)
+			{
+				SignalListener(queue_name, str);
+			}
+			amqp_destroy_envelope(&envelope);
+// 			int rtn = amqp_basic_ack(m_conn, channel, envelope.delivery_tag, 1);
+// 			if (rtn != 0)
+// 			{
+// 				amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
+// 				return -1;
+// 			}
+		}
 		
-		if (SignalListener != nullptr)
-		{
-			SignalListener(queue_name, str);
-		}
-	
-		amqp_destroy_envelope(&envelope);
-		int rtn = amqp_basic_ack(m_conn, channel, envelope.delivery_tag, 1);
-		if (rtn != 0)
-		{
-			amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
-			return -1;
-		}
 		hasget++;
 		__sleep(1);
 	}
