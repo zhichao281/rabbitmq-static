@@ -25,7 +25,7 @@ CRabbitMQ::CRabbitMQ()
 	m_strPassWord = "1523526883053_43a5ee3de54bb08d9aa12e1c82c1a9259f6f0ad6";
 	m_strVHost = "wsrtc.vpclient_test.com";
 
-	m_strExchangeName = "1amq.topic";
+	m_strExchangeName = "amq.topic";
 	this->m_channel = 1; //默认用1号通道，通道无所谓 
 	m_sock = NULL;
 	m_conn = NULL;
@@ -178,7 +178,7 @@ int32_t CRabbitMQ::exchangeDeclare(
 	amqp_channel_close(m_conn, m_channel, AMQP_REPLY_SUCCESS);
 	return 0;
 }
-#include <map>
+
 //step2 declare a queue
 int32_t CRabbitMQ::queueDeclare(
 	const std::string &queue_name,
@@ -223,7 +223,7 @@ int32_t CRabbitMQ::bindQueue(
 	string & ErrorReturn)
 {
 	amqp_channel_open(m_conn, m_channel);
-	//amqp_confirm_select(m_conn, m_channel);  //在通道上打开Publish确认  
+
 	amqp_bytes_t _queue = amqp_cstring_bytes(queue_name.c_str());
 	amqp_bytes_t _exchange = amqp_cstring_bytes(exchange_name.c_str());
 	amqp_bytes_t _routkey = amqp_cstring_bytes(routing_key.c_str());
@@ -503,12 +503,16 @@ int32_t CRabbitMQ::consumer(std::weak_ptr<bool> bRun, const string & queue_name,
 				SignalListener(queue_name, str);
 			}
 			amqp_destroy_envelope(&envelope);
-// 			int rtn = amqp_basic_ack(m_conn, channel, envelope.delivery_tag, 1);
-// 			if (rtn != 0)
-// 			{
-// 				amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
-// 				return -1;
-// 			}
+			if (ack == false)
+			{
+				int rtn = amqp_basic_ack(m_conn, channel, envelope.delivery_tag, 1);
+				if (rtn != 0)
+				{
+					amqp_channel_close(m_conn, channel, AMQP_REPLY_SUCCESS);
+					return -1;
+				}
+			}
+
 		}
 		
 		hasget++;
@@ -550,6 +554,11 @@ void CRabbitMQ::__sleep(uint32_t millsecond)
 #elif defined (WIN32)
 	Sleep(millsecond);
 #endif
+}
+
+void CRabbitMQ::setExchangeName(std::string strExchangeNmae)
+{
+	m_strExchangeName = strExchangeNmae;
 }
 
 void CRabbitMQ::setChannel(const uint32_t channel)

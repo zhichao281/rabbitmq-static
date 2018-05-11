@@ -216,6 +216,7 @@ public:
 
 	void __sleep(uint32_t millsecond);
 
+	void  setExchangeName(std::string strExchangeNmae);
 private:
 
 	ThreadSignalListener		  m_WSSignalListener;  //监听amqo信令频道接受信息

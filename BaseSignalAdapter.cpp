@@ -12,7 +12,7 @@ const std::string EXCHANGE_TYPE_TOPIC("topic");
 
 BaseSignalAdapter::BaseSignalAdapter()
 {
-	m_strExchangeName = "1amq.topic";
+	m_strExchangeName = "amq.topic";
 	//m_pSignalListenerThread.reset();
 	//m_pRabbitmq.reset();
 	m_is_connected = false;
@@ -46,6 +46,7 @@ int32_t BaseSignalAdapter::Connect(const std::string & host, int port,
 	{
 		m_pRabbitmqSend.reset();
 	}
+	m_pRabbitmqSend->setExchangeName(m_strExchangeName);
 	return res;
 }
 
